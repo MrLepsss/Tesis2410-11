@@ -13,7 +13,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=clave
       - APP_ARCHIVOS_RUTA_BASE=/app/transcripciones
     volumes:
-      - C:/Users/Usuario/Documents/Transcripciones:/app/transcripciones
+      - C:\Users\JAMES MORIARTY\Documents/Transcripciones:/app/transcripciones
     depends_on:
       - mysql
     healthcheck:
