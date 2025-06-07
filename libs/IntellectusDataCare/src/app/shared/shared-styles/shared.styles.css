@@ -1,0 +1,121 @@
+/* Estilos generales para el formulario */
+form {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: auto;
+
+}
+h2{
+  text-align: center;
+}
+/* Estilos para los campos del formulario */
+
+
+label {
+  display: block;
+  position: relative;
+  font-weight: bold;
+  color: #003366;
+  font-size: 14px;
+  text-align: center;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="email"],
+input[type="number"],
+input[type="tel"],
+select {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #003366;
+  /* Azul oscuro */
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 19px;
+}
+input[type="radio"] {
+  margin-right: 5px;
+}
+select option {
+  white-space: normal;
+}
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+select:focus {
+  border-color: #007bff;
+  /* Azul más claro */
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Estilo para el botón de envío */
+button[type="submit"] {
+  background-color: #003366;
+  /* Azul oscuro */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  max-width: fit-content;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+  /* Azul medio */
+}
+
+/* Estilo para el campo de total (solo lectura) */
+input[readonly] {
+  background-color: #e9ecef;
+  color: #495057;
+  cursor: not-allowed;
+}
+.error{
+  color: red;
+  position:static;
+}
+
+.container{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.component{
+  display: block;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  min-width: 300px;
+  height: 100%;
+}
+.pregunta{
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+button{
+    background-color: #003366;
+    /* Azul oscuro */
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    max-width: fit-content;
+    margin-left: 20px;
+    margin-top: 10px;
+}

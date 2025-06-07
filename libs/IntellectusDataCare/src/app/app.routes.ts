@@ -1,0 +1,54 @@
+import { Routes } from '@angular/router';
+import { CategoriaGeneralComponent } from './forms/categoria-general/categoria-general.component';
+import { AreaComponent } from './tabs/general/general/area.component';
+import { PacientesComponent } from './tabs/pacientes/pacientes.component';
+import { CrearPacienteComponent } from './tabs/pacientes/crearPaciente/crear-paciente/crear-paciente.component';
+import { CrearConsultaComponent } from './tabs/general/crearConsulta/crear-consulta/crear-consulta.component';
+import { ConsultaLayoutComponent } from './layout/consulta-layout/consulta-layout.component';
+import { WhisperComponent } from './tabs/whisper/whisper.component';
+import { ArchivosTabComponent } from './tabs/archivos-tab/archivos-tab.component';
+
+export const routes: Routes = [
+    {
+        path: 'pacientes',
+        component: PacientesComponent,
+    },
+    {
+        path: 'crear-paciente',
+        component: CrearPacienteComponent,
+        title: 'Crear Paciente'
+    },
+    {
+    path: 'consulta',
+    component: ConsultaLayoutComponent, // 🔁 nuevo Layout Component
+    children: [
+        {
+        path: ':areaNombre',
+        component: AreaComponent,
+        children: [
+            {
+            path: ':idCategoria',
+            component: CategoriaGeneralComponent
+            }
+        ]
+        }
+    ]
+    },
+    {
+        path: 'whisper',
+        component: WhisperComponent
+    },
+    {
+      path: 'archivos',
+      component: ArchivosTabComponent
+    },
+    {
+        path: '',
+        redirectTo: 'pacientes',
+        pathMatch: 'full'
+    },
+    {
+        path: '**',
+        redirectTo: 'pacientes'
+    }
+];
