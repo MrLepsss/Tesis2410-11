@@ -290,7 +290,7 @@ public class PdfGeneratorService {
                 "informe.pdf",
                 MediaType.APPLICATION_PDF_VALUE,
                 pdfBytes);
-        archivoConsultaService.guardarArchivo(consultaId, pdfMultipart);
+        archivoConsultaService.guardarArchivo(consultaId, pdfMultipart, true);
 
         ByteArrayResource resource = new ByteArrayResource(pdfBytes);
         HttpHeaders headers = new HttpHeaders();

@@ -52,9 +52,10 @@ public class ArchivoConsultaService {
         String rutaCompleta = Paths.get(rutaBase, nombreArchivo).toString();
         Files.write(Paths.get(rutaCompleta), dto.getTranscription().getBytes());
         ArchivoConsulta nuevoArchivo = new ArchivoConsulta();
-        nuevoArchivo.setRutaArchivo(rutaCompleta);
+        nuevoArchivo.setRutaArchivo(nombreArchivo);
         nuevoArchivo.setConsulta(consulta);
         nuevoArchivo.setTipoArchivo("Transcripcion");
+        archivoRepository.save(nuevoArchivo);
         return ResponseEntity.ok("Archivo creado exitosamente en la ruta: " + rutaCompleta);
     }
 
@@ -64,7 +65,8 @@ public class ArchivoConsultaService {
             return ResponseEntity.notFound().build();
         }
         String ruta = archivoConsulta.getRutaArchivo();
-        File archivo = new File(ruta);
+        String rutaCompleta = Paths.get(rutaBase, ruta).toString();
+        File archivo = new File(rutaCompleta);
         if (!archivo.exists()) {
             return ResponseEntity.notFound().build();
         }
@@ -78,6 +80,8 @@ public class ArchivoConsultaService {
             contentType = MediaType.IMAGE_JPEG_VALUE;
         } else if (ruta.endsWith(".png")) {
             contentType = MediaType.IMAGE_PNG_VALUE;
+        } else if (ruta.endsWith(".txt")) {
+            contentType = MediaType.TEXT_PLAIN_VALUE;
         } else {
             contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
         }
@@ -110,7 +114,7 @@ public class ArchivoConsultaService {
                 .toList();
     }
 
-    public ResponseEntity<String> guardarArchivo(Integer consultaId, MultipartFile archivo) {
+    public ResponseEntity<String> guardarArchivo(Integer consultaId, MultipartFile archivo, boolean report) {
         try {
             Consulta consulta = consultaRepository.findById(consultaId).orElse(null);
             if (consulta == null) {
@@ -132,21 +136,23 @@ public class ArchivoConsultaService {
                 return ResponseEntity.badRequest().body("Tipo de archivo no soportado: " + extension);
             }
             String nuevoNombre;
-            if( tipo.equals("PDF")) {
+            if( tipo.equals("PDF") && report) {
                 nuevoNombre = "consulta_" +consulta.getFechaEvaluacion().toString() + "_" + consulta.getPaciente().getNombre()+ ".pdf";
             } else {
                 nuevoNombre = "Anexo_" + consulta.getPaciente().getNombre() + "_" + System.currentTimeMillis() + "." + extension;
             }
             String rutaDestino = Paths.get(rutaBase, nuevoNombre).toString();
-
             Files.write(Paths.get(rutaDestino), archivo.getBytes());
+            Optional<ArchivoConsulta> existente = archivoRepository
+                .findByRutaArchivo(rutaDestino);
 
-            ArchivoConsulta nuevoArchivo = new ArchivoConsulta();
-            nuevoArchivo.setConsulta(consulta);
-            nuevoArchivo.setTipoArchivo(tipo);
-            nuevoArchivo.setRutaArchivo(rutaDestino);
-
-            archivoRepository.save(nuevoArchivo);
+                        if (existente != null) {
+                            ArchivoConsulta nuevoArchivo = new ArchivoConsulta();
+                            nuevoArchivo.setConsulta(consulta);
+                            nuevoArchivo.setTipoArchivo(tipo);
+                            nuevoArchivo.setRutaArchivo(nuevoNombre);
+                            archivoRepository.save(nuevoArchivo);
+                        }
 
             return ResponseEntity.ok("Archivo guardado correctamente: " + nuevoNombre);
         } catch (IOException e) {

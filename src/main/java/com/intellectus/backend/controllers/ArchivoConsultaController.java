@@ -47,7 +47,7 @@ public class ArchivoConsultaController {
     public ResponseEntity<String> subirArchivo(
             @RequestParam("consultaId") Integer consultaId,
             @RequestParam("archivo") MultipartFile archivo) {
-        return archivoConsultaService.guardarArchivo(consultaId, archivo);
+        return archivoConsultaService.guardarArchivo(consultaId, archivo, false);
     }
 
     @PostMapping("/transcripcion")
