@@ -1,6 +1,6 @@
 <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()">
   <div *ngFor="let question of preguntas">
-    <app-options *ngIf="question.tipoRespuesta === 'Desplegable'" [question]="question" [control]="getControl(question.id.toString())"></app-options>
+    <app-options *ngIf="question.tipoRespuesta === 'Desplegable'" [question]="question" [control]="getControl(question.id.toString()) " (seleccionCambiada)="recalcularSuma()"></app-options>
     <app-text *ngIf="question.tipoRespuesta === 'Texto'" [question]="question" [control]="getControl(question.id.toString())"></app-text>
     <app-number *ngIf="question.tipoRespuesta === 'Numero'" [question]="question" [control]="getControl(question.id.toString())"></app-number>
     <app-date *ngIf="question.tipoRespuesta === 'date'" [question]="question" [control]="getControl(question.id.toString())"></app-date>
@@ -16,3 +16,6 @@
 
   </div>
 </form>
+<div class="total">
+  <strong>Suma total:</strong> {{ sumaTotal }}
+</div>

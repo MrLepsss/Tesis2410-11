@@ -17,11 +17,22 @@ import { GraficoQuestionComponent } from "../../questions/grafico-question/grafi
 @Component({
   selector: 'app-formulario',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, OptionsComponent, TextComponent, NumberComponent, DateComponent, YesNoQuestionComponent, OptionsValueComponent, FijoComponent, GraficoQuestionComponent],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    OptionsComponent,
+    TextComponent,
+    NumberComponent,
+    DateComponent,
+    YesNoQuestionComponent,
+    OptionsValueComponent,
+    FijoComponent,
+    GraficoQuestionComponent,
+  ],
   templateUrl: './formulario.component.html',
-  styleUrl: './formulario.component.css'
+  styleUrl: './formulario.component.css',
 })
-export class FormularioComponent implements OnInit, OnChanges{
+export class FormularioComponent implements OnInit, OnChanges {
   @Input() idCategoria!: number;
   @Output() formSubmit = new EventEmitter<FormGroup>();
   @Output() errorEncontrado = new EventEmitter<string>();
@@ -32,7 +43,7 @@ export class FormularioComponent implements OnInit, OnChanges{
   constructor() {}
   private preguntasService = inject(PreguntasService);
   private consultaService = inject(ConsultaService);
-
+  sumaTotal: number = 0;
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['idCategoria'] && !changes['idCategoria'].firstChange) {
       this.loadPreguntas();
@@ -58,21 +69,19 @@ export class FormularioComponent implements OnInit, OnChanges{
       },
       error: (err) => {
         console.error('Error al cargar preguntas', err);
-      }
+      },
     });
   }
 
   private detectarErrorEnPreguntas(preguntas: preguntaDto[]): string | null {
-    const preguntaConError = preguntas.find(p => p.tipoRespuesta === 'Error');
+    const preguntaConError = preguntas.find((p) => p.tipoRespuesta === 'Error');
     return preguntaConError ? preguntaConError.valor : null;
   }
-
-
 
   buildForm(): void {
     const group: Record<string, FormControl> = {};
 
-    this.preguntas.forEach(p => {
+    this.preguntas.forEach((p) => {
       const control = this.crearControlParaPregunta(p);
       group[p.id.toString()] = control;
     });
@@ -82,7 +91,10 @@ export class FormularioComponent implements OnInit, OnChanges{
   private crearControlParaPregunta(p: preguntaDto): FormControl {
     let initialValue: any = '';
 
-    if (p.tipoRespuesta === 'Desplegable' && p.opcionSeleccionada !== undefined) {
+    if (
+      p.tipoRespuesta === 'Desplegable' &&
+      p.opcionSeleccionada !== undefined
+    ) {
       initialValue = p.opcionSeleccionada;
     } else if (['Texto', 'Numero', 'Bool', 'date'].includes(p.tipoRespuesta)) {
       initialValue = p.valorAlmacenado ?? '';
@@ -91,8 +103,27 @@ export class FormularioComponent implements OnInit, OnChanges{
     return new FormControl(initialValue, p.validators || []);
   }
 
+  recalcularSuma(): void {
+    let total = 0;
 
+    for (const pregunta of this.preguntas) {
+      if (
+        pregunta.tipoRespuesta === 'Desplegable' &&
+        pregunta.opciones?.length
+      ) {
+        const selectedId = this.form.get(pregunta.id.toString())?.value;
+        const selectedOption = pregunta.opciones.find(
+          (o) => o.id === selectedId
+        );
 
+        if (selectedOption?.tipoValor === 'Numero') {
+          total += Number(selectedOption.valor || 0);
+        }
+      }
+    }
+
+    this.sumaTotal = total;
+  }
 
   getControl(id: string): FormControl {
     return this.form.get(id) as FormControl;
