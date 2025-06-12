@@ -4,6 +4,7 @@ import { ArchivosService } from '../../shared/archivos/archivos.service';
 import { ConsultaService } from '../../shared/consulta/consulta.service';
 import { PacienteService } from '../../shared/paciente/paciente.service';
 import { CommonModule } from '@angular/common';
+import { NotificationComponent } from '../../notifications/notification/notification.component';
 
 @Component({
   selector: 'app-archivos-forms',
@@ -46,12 +47,12 @@ export class ArchivosFormsComponent {
     if (file) {
       this.archivoService.subirArchivo(this.consulta?.id!, file).subscribe({
         next: () => {
-          alert('Archivo subido correctamente');
+          NotificationComponent.mostrar('Archivo subido correctamente', 'success');
           this.cargarArchivos();
         },
         error: (err) => {
           console.error('Error al subir archivo:', err);
-          alert('Error al subir archivo');
+          NotificationComponent.mostrar('Error al subir archivo', 'error');
         },
       });
     }

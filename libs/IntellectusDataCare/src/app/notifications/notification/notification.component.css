@@ -1,0 +1,25 @@
+.notificacion {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  color: white;
+  font-weight: bold;
+  z-index: 1000;
+  transition: opacity 0.3s ease;
+}
+
+.success {
+  background-color: #4caf50;
+}
+
+.warning {
+  background-color: #ffa000;
+}
+
+.error {
+  background-color: #f44336;
+}

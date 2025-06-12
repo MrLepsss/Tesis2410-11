@@ -3,6 +3,7 @@ import { ConsultaService } from '../../shared/consulta/consulta.service';
 import { MedicosService } from '../../shared/medicos/medicos.service';
 import { MedicosSelectorComponent } from '../../forms/medicos-selector/medicos-selector.component';
 import { MedicoDTO } from '../../interfaces/dtos/medico-dto';
+import { NotificationComponent } from '../../notifications/notification/notification.component';
 
 @Component({
   selector: 'app-medicos-tab',
@@ -12,7 +13,7 @@ import { MedicoDTO } from '../../interfaces/dtos/medico-dto';
   styleUrl: './medicos-tab.component.css'
 })
 export class MedicosTabComponent implements OnInit {
-  
+
   private servicio = inject(MedicosService);
   private consultaSrv = inject(ConsultaService);
   private consulta = this.consultaSrv.getConsultaActualSync();
@@ -28,8 +29,8 @@ export class MedicosTabComponent implements OnInit {
   guardarMedicos(ids: number[]) {
     if (this.consulta) {
       this.servicio.sincronizarMedicosConsulta(this.consulta.id, ids).subscribe({
-        next: () => alert('Médicos sincronizados'),
-        error: () => alert('Error al sincronizar médicos')
+        next: () => NotificationComponent.mostrar('Médicos sincronizados correctamente', 'success'),
+        error: () => NotificationComponent.mostrar('Error al sincronizar médicos', 'error'),
       });
     }
   }

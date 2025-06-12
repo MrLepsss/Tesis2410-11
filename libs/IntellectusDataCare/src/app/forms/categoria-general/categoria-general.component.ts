@@ -10,6 +10,7 @@ import { TranstornosTabComponent } from '../../tabs/transtornos-tab/transtornos-
 import { MedicosTabComponent } from '../../tabs/medicos-tab/medicos-tab.component';
 import { ArchivosService } from '../../shared/archivos/archivos.service';
 import { ConsultaService } from '../../shared/consulta/consulta.service';
+import { NotificationComponent } from '../../notifications/notification/notification.component';
 
 @Component({
   selector: 'app-categoria-general',
@@ -43,7 +44,7 @@ export class CategoriaGeneralComponent implements OnInit {
     });
   }
   mostrarPopup(mensaje: string): void {
-    alert(`⚠️ Error de la categoría:\n${mensaje}`);
+    NotificationComponent.mostrar(`Error de la categoría: ${mensaje}`, 'error');
   }
 
   handleFormSubmit(form: FormGroup): void {

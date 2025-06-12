@@ -4,6 +4,7 @@ import { TrasntornosService } from '../../shared/trasntornos/trasntornos.service
 import { ConsultaService } from '../../shared/consulta/consulta.service';
 import { CommonModule } from '@angular/common';
 import { SeleccionTrastornoDTO } from '../../interfaces/dtos/seleccion-trastorno-dto';
+import { NotificationComponent } from '../../notifications/notification/notification.component';
 
 @Component({
   selector: 'app-transtornos-tab',
@@ -27,7 +28,7 @@ export class TranstornosTabComponent implements OnInit{
 
   onAgregarTrastorno(trastorno: any) {
     const yaExiste = this.seleccionados().some(t => t.transtornoId === trastorno.id);
-    
+
     if (!yaExiste) {
       this.seleccionados.update(arr => [...arr, trastorno]);
     }
@@ -39,14 +40,14 @@ export class TranstornosTabComponent implements OnInit{
       this.service.sincronizarTrastornoEspecificoConsulta(this.consulta.id, ids).subscribe({
         next: (res) => {
           console.log('Guardado exitosamente:', res);
-          alert('Sincronización exitosa.');
+          NotificationComponent.mostrar('Trastornos sincronizados correctamente', 'success');
         },
         error: (err) => {
           console.error('Error al guardar:', err);
-          alert('Error al sincronizar los trastornos.');
+          NotificationComponent.mostrar('Error al sincronizar trastornos', 'error');
         }
       });
     }
-    
+
   }
 }
